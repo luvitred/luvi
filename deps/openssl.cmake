@@ -11,10 +11,7 @@ else (WithSharedOpenSSL)
   message("Enabling Static OpenSSL")
   include(ExternalProject)
 
-  set(OPENSSL_CONFIG_OPTIONS no-unit-test no-shared no-stdio no-idea no-mdc2 no-rc5 --prefix=${CMAKE_BINARY_DIR})
-  if(NOT WithOpenSSLASM)
-    set(OPENSSL_CONFIG_OPTIONS no-asm ${OPENSSL_CONFIG_OPTIONS})
-  endif()
+  set(OPENSSL_CONFIG_OPTIONS no-unit-test no-shared no-asm no-rc5 --prefix=${CMAKE_BINARY_DIR})
 
   if(WIN32)
       if("${CMAKE_GENERATOR}" MATCHES "(Win64|IA64)")
@@ -27,24 +24,22 @@ else (WithSharedOpenSSL)
       set(OPENSSL_CONFIGURE_COMMAND ./config ${OPENSSL_CONFIG_OPTIONS})
       set(OPENSSL_BUILD_COMMAND make)
   endif()
-  
+
   ExternalProject_Add(openssl
       PREFIX            openssl
-      URL               https://www.openssl.org/source/openssl-1.1.1b.tar.gz
-      URL_HASH          SHA256=5c557b023230413dfb0756f3137a13e6d726838ccd1430888ad15bfb2b43ea4b
-      LOG_BUILD         ON
+      URL               https://www.openssl.org/source/openssl-1.0.2s.tar.gz
+      URL_HASH          SHA256=cabd5c9492825ce5bd23f3c3aeed6a97f8142f606d893df216411f07d1abab96
       BUILD_IN_SOURCE   YES
       BUILD_COMMAND     ${OPENSSL_BUILD_COMMAND}
       CONFIGURE_COMMAND ${OPENSSL_CONFIGURE_COMMAND}
       INSTALL_COMMAND   ""
       TEST_COMMAND      ""
       UPDATE_COMMAND    ""
-      UPDATE_DISCONNECTED YES
   )
-  
+
   set(OPENSSL_DIR ${CMAKE_BINARY_DIR}/openssl/src/openssl)
   set(OPENSSL_INCLUDE ${OPENSSL_DIR}/include)
-  
+
   if(WIN32)
     set(OPENSSL_LIB_CRYPTO ${OPENSSL_DIR}/libcrypto.lib)
     set(OPENSSL_LIB_SSL ${OPENSSL_DIR}/libssl.lib)
@@ -52,12 +47,12 @@ else (WithSharedOpenSSL)
     set(OPENSSL_LIB_CRYPTO ${OPENSSL_DIR}/libcrypto.a)
     set(OPENSSL_LIB_SSL ${OPENSSL_DIR}/libssl.a)
   endif()
-  
+
   add_library(openssl_ssl STATIC IMPORTED)
   set_target_properties(openssl_ssl PROPERTIES IMPORTED_LOCATION ${OPENSSL_LIB_SSL})
   add_library(openssl_crypto STATIC IMPORTED)
   set_target_properties(openssl_crypto PROPERTIES IMPORTED_LOCATION ${OPENSSL_LIB_CRYPTO})
-  
+
   include_directories(${OPENSSL_INCLUDE})
   list(APPEND LIB_LIST openssl_ssl openssl_crypto)
 endif (WithSharedOpenSSL)
