@@ -208,10 +208,11 @@ static int lmz_writer_add_mem(lua_State *L) {
   }
   return 0;
 }
+
 static int lmz_writer_finalize(lua_State *L) {
   lmz_file_t* zip = luaL_checkudata(L, 1, "miniz_writer");
-  void* data;
-  size_t size;
+  void* data = NULL;
+  size_t size = 0;
   if (!mz_zip_writer_finalize_heap_archive(&(zip->archive), &data, &size)) {
     luaL_error(L, "Problem finalizing archive");
   }
