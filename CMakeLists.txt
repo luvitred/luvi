@@ -41,7 +41,7 @@ if(MSVC)
 endif()
 
 if(CMAKE_COMPILER_IS_GNUCC)
-  add_definitions( -Wno-unused-function)
+  add_definitions(-Wno-unused-function -Wno-unused-value)
 endif()
 
 if (EXISTS "VERSION")
