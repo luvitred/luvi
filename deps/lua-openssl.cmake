@@ -11,6 +11,7 @@ include_directories(
 )
 
 add_definitions(
+  -DOPENSSL_NO_COMP
   -DCOMPAT52_IS_LUAJIT
 )
 
