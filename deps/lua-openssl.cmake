@@ -6,7 +6,7 @@ endif()
 include_directories(
   ${CMAKE_BINARY_DIR}/include
   ${LUA_OPENSSL_DIR}/deps/auxiliar
-  ${LUA_OPENSSL_DIR}/deps/lua-compat
+  ${LUA_OPENSSL_DIR}/deps/lua-compat/c-api
   ${LUA_OPENSSL_DIR}/src
 )
 
