@@ -14,8 +14,9 @@
  *  limitations under the License.
  *
  */
-
+#ifndef LUA_LIB
 #define LUA_LIB
+#endif
 #include "luvi.h"
 #include "luv.h"
 #include "lenv.c"
@@ -73,7 +74,7 @@ static lua_State* vm_acquire(){
   lua_pushcfunction(L, luaopen_luv);
   lua_call(L, 0, 1);
   lua_setfield(L, -2, "uv");
-  
+
   // remove package.loaded
   lua_remove(L, -1);
 
