@@ -14,8 +14,9 @@
  *  limitations under the License.
  *
  */
-
+#ifndef LUA_LIB
 #define LUA_LIB
+#endif
 #include "luvi.h"
 #include "luv.h"
 #include "lenv.c"
