@@ -201,5 +201,6 @@ int main(int argc, char* argv[] ) {
     res = (int)lua_tointeger(L, -1);
   }
   vm_release(L);
+  uv_library_shutdown();
   return res;
 }
