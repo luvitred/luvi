@@ -166,7 +166,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "FreeBSD")
 endif()
 
 if("${CMAKE_SYSTEM_NAME}" MATCHES "Linux")
-  set(EXTRA_LIBS ${EXTRA_LIBS} rt)
+  set(EXTRA_LIBS ${EXTRA_LIBS} rt m dl)
 endif()
 
 target_link_libraries(luvi ${LUVI_LIBRARIES} ${EXTRA_LIBS} ${CMAKE_THREAD_LIBS_INIT})
