@@ -12,7 +12,9 @@ MACRO(LUAJIT_add_custom_commands luajit_target)
   IF(TARGET_ARCH)
     SET(LJ_BYTECODE_OPTS ${LJ_BYTECODE_OPTS} -a ${TARGET_ARCH})
   ENDIF(TARGET_ARCH)
-  SET(LUA_PATH $ENV{LUA_PATH})
+  IF(NOT LUA_COMMAND)
+    SET(LUA_COMMAND "luajit")
+  ENDIF(NOT LUA_COMMAND)
   SET(target_srcs "")
   FOREACH(file ${ARGN})
     IF(${file} MATCHES ".*\\.lua$")
@@ -29,7 +31,7 @@ MACRO(LUAJIT_add_custom_commands luajit_target)
       add_custom_command(
         OUTPUT ${generated_file}
         MAIN_DEPENDENCY ${source_file}
-        COMMAND "LUA_PATH=${LUA_PATH}" luajit
+        COMMAND ${LUA_COMMAND}
         ARGS -b ${LJ_BYTECODE_OPTS}
           ${source_file}
           ${generated_file}
