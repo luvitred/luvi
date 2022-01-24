@@ -27,8 +27,8 @@ else (WithSharedOpenSSL)
 
   ExternalProject_Add(openssl
       PREFIX            openssl
-      URL               https://www.openssl.org/source/openssl-1.1.1d.tar.gz
-      URL_HASH          SHA256=1e3a91bc1f9dfce01af26026f856e064eab4c8ee0a8f457b5ae30b40b8b711f2
+      URL               https://www.openssl.org/source/openssl-1.1.1l.tar.gz
+      URL_HASH          SHA256=0b7a3e5e59c34827fe0c3a74b7ec8baef302b98fa80088d7f9153aa16fa76bd1
       BUILD_IN_SOURCE   YES
       BUILD_COMMAND     ${OPENSSL_BUILD_COMMAND}
       CONFIGURE_COMMAND ${OPENSSL_CONFIGURE_COMMAND}
