@@ -13,7 +13,12 @@ else (WithSharedOpenSSL)
     OUTPUT_STRIP_TRAILING_WHITESPACE
   )
 
-  set(OPENSSL_CONFIG_OPTIONS no-tests no-module no-shared no-pinshared no-makedepend --prefix=${CMAKE_BINARY_DIR})
+  set(OPENSSL_CONFIG_OPTIONS
+    no-tests no-shared no-pinshared no-makedepend no-async
+    no-ssl3 no-ssl3-method no-tls1 no-tls1-method no-tls1_1 no-tls1_1-method no-dtls1 no-dtls1-method
+    no-rc2 no-rc4 no-idea no-md2 no-md4 no-bf no-cast no-rmd160 no-whirlpool no-seed no-camellia no-des no-comp
+    no-weak-ssl-ciphers
+    --prefix=${CMAKE_BINARY_DIR})
   if (OPENSSL_CONFIG_DIR)
     message("Using existing OpenSSL configuration directory: ${OPENSSL_CONFIG_DIR}")
     set(OPENSSL_CONFIG_OPTIONS ${OPENSSL_CONFIG_OPTIONS} --openssldir=${OPENSSL_CONFIG_DIR})
@@ -28,7 +33,12 @@ else (WithSharedOpenSSL)
     set(OPENSSL_CONFIG_OPTIONS no-asm ${OPENSSL_CONFIG_OPTIONS})
   endif ()
 
-  set(OPENSSL_CONFIGURE_TARGET)
+  if (CMAKE_SYSTEM_PROCESSOR MATCHES "^arm")
+    set(OPENSSL_CONFIGURE_TARGET "linux-armv4")
+  else ()
+    set(OPENSSL_CONFIGURE_TARGET "linux-x86_64")
+  endif()
+
   set(OPENSSL_BUILD_COMMAND make)
   if (WIN32)
     if (MSVC)
@@ -56,8 +66,8 @@ else (WithSharedOpenSSL)
   include(FetchContent)
 
   FetchContent_Declare(openssl
-    URL        https://github.com/openssl/openssl/releases/download/openssl-3.4.0/openssl-3.4.0.tar.gz
-    URL_HASH   SHA256=e15dda82fe2fe8139dc2ac21a36d4ca01d5313c75f99f46c4e8a27709b7294bf
+    URL        https://www.openssl.org/source/openssl-1.1.1w.tar.gz
+    URL_HASH   SHA256=cf3098950cb4d853ad95c0841f1f9c6d3dc102dccfcacd521d93925208b76ac8
   )
 
   FetchContent_MakeAvailable(openssl)
@@ -81,7 +91,7 @@ else (WithSharedOpenSSL)
     COMMAND perl configdata.pm --dump
     WORKING_DIRECTORY ${OPENSSL_ROOT_DIR}
   )
-  
+
   if (MSVC)
     set(OPENSSL_LIB_CRYPTO ${OPENSSL_ROOT_DIR}/libcrypto.lib)
     set(OPENSSL_LIB_SSL ${OPENSSL_ROOT_DIR}/libssl.lib)

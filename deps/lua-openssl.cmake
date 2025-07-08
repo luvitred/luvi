@@ -5,8 +5,19 @@ set(LUA_OPENSSL_DIR "${CMAKE_CURRENT_SOURCE_DIR}/deps/lua-openssl" CACHE PATH "P
 include_directories(
   ${CMAKE_BINARY_DIR}/include
   ${LUA_OPENSSL_DIR}/deps/auxiliar
-  ${LUA_OPENSSL_DIR}/deps/lua-compat
+  ${LUA_OPENSSL_DIR}/deps/lua-compat/c-api
   ${LUA_OPENSSL_DIR}/src
+)
+
+add_compile_definitions(
+  OPENSSL_NO_COMP
+  LUA_OPENSSL_TINY
+  OPENSSL_NO_DTLS1_METHOD
+  OPENSSL_NO_DTLS1_2_METHOD
+  OPENSSL_NO_SSL3_METHOD
+  OPENSSL_NO_TLS1_METHOD
+  OPENSSL_NO_TLS1_1_METHOD
+  OPENSSL_NO_TLS1_2_METHOD
 )
 
 if(WIN32)
@@ -23,7 +34,7 @@ add_library(lua_openssl STATIC
   ${LUA_OPENSSL_DIR}/src/bio.c
   ${LUA_OPENSSL_DIR}/src/callback.c
   ${LUA_OPENSSL_DIR}/src/cipher.c
-  ${LUA_OPENSSL_DIR}/src/cms.c
+  # ${LUA_OPENSSL_DIR}/src/cms.c
   ${LUA_OPENSSL_DIR}/src/compat.c
   ${LUA_OPENSSL_DIR}/src/crl.c
   ${LUA_OPENSSL_DIR}/src/csr.c
@@ -34,22 +45,22 @@ add_library(lua_openssl STATIC
   ${LUA_OPENSSL_DIR}/src/engine.c
   ${LUA_OPENSSL_DIR}/src/mac.c
   ${LUA_OPENSSL_DIR}/src/hmac.c
-  ${LUA_OPENSSL_DIR}/src/kdf.c
+  # ${LUA_OPENSSL_DIR}/src/kdf.c
   ${LUA_OPENSSL_DIR}/src/lbn.c
   ${LUA_OPENSSL_DIR}/src/lhash.c
   ${LUA_OPENSSL_DIR}/src/misc.c
-  ${LUA_OPENSSL_DIR}/src/ocsp.c
+  # ${LUA_OPENSSL_DIR}/src/ocsp.c
   ${LUA_OPENSSL_DIR}/src/oids.txt
   ${LUA_OPENSSL_DIR}/src/openssl.c
-  ${LUA_OPENSSL_DIR}/src/ots.c
+  # ${LUA_OPENSSL_DIR}/src/ots.c
   ${LUA_OPENSSL_DIR}/src/param.c
-  ${LUA_OPENSSL_DIR}/src/pkcs12.c
-  ${LUA_OPENSSL_DIR}/src/pkcs7.c
+  # ${LUA_OPENSSL_DIR}/src/pkcs12.c
+  # ${LUA_OPENSSL_DIR}/src/pkcs7.c
   ${LUA_OPENSSL_DIR}/src/pkey.c
   ${LUA_OPENSSL_DIR}/src/private.h
   ${LUA_OPENSSL_DIR}/src/rsa.c
   ${LUA_OPENSSL_DIR}/src/sk.h
-  ${LUA_OPENSSL_DIR}/src/srp.c
+  # ${LUA_OPENSSL_DIR}/src/srp.c
   ${LUA_OPENSSL_DIR}/src/ssl.c
   ${LUA_OPENSSL_DIR}/src/th-lock.c
   ${LUA_OPENSSL_DIR}/src/util.c

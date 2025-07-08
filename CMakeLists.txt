@@ -11,7 +11,7 @@ if (MSVC)
 endif ()
 
 if (CMAKE_COMPILER_IS_GNUCC)
-  add_compile_options(-Wno-unused-function)
+  add_compile_options(-Wno-unused-function -Wno-unused-value)
 endif ()
 
 if (MINGW)
@@ -59,6 +59,7 @@ option(WithLPEG "Include LPEG" OFF)
 option(WithSharedLPEG "Shared or Static LPEG" OFF)
 option(WithZLIB "Include ZLIB" OFF)
 option(WithSharedZLIB "Shared or Static ZLIB" OFF)
+option(WithSharedLuaJIT "Shared or Static LuaJIT" OFF)
 
 find_package(Threads)
 set (LUVI_LIBRARIES ${CMAKE_THREAD_LIBS_INIT})
@@ -76,7 +77,7 @@ if (WithSharedLibluv)
   include_directories(${LIBUV_INCLUDE_DIRS})
 
   include(CheckCSourceCompiles)
-  
+
   set(CMAKE_REQUIRED_INCLUDES ${LUAJIT_INCLUDE_DIRS})
   set(CMAKE_REQUIRED_LIBRARIES ${LUAJIT_LIBRARIES})
   check_c_source_compiles("
@@ -100,13 +101,14 @@ else (WithSharedLibluv)
     include_directories(deps/luv/deps/lua)
     list(APPEND LUVI_LIBRARIES lualib)
   else ()
-    include_directories(deps/luv/deps/luajit/src)
-    list(APPEND LUVI_LIBRARIES luajit-5.1)
-
-    set(luajit_vmdef ${CMAKE_CURRENT_BINARY_DIR}/deps/luv/vmdef.lua)
-    set_source_files_properties(${luajit_vmdef} PROPERTIES GENERATED TRUE)
-
-    list(APPEND LUVI_DEFINITIONS WITH_LJ_VMDEF)
+    if (WithSharedLuaJIT)
+      find_package(LuaJIT  REQUIRED)
+      include_directories(${LUAJIT_INCLUDE_DIRS})
+      list(APPEND LUVI_LIBRARIES ${LUAJIT_LIBRARIES})
+    else ()
+      include_directories(deps/luv/deps/luajit/src)
+      list(APPEND LUVI_LIBRARIES luajit-5.1)
+    endif ()
   endif ()
 
   list(APPEND LUVI_LIBRARIES libluv_a uv_a)
@@ -165,7 +167,6 @@ lua_add_executable(luvi
   src/lua/init.lua
   src/lua/luvipath.lua
   src/lua/luvibundle.lua
-  ${luajit_vmdef}
   ${lpeg_re_lua}
 )
 
